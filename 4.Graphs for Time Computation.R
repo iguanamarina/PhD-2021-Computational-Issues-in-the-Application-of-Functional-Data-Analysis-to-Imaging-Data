@@ -1,3 +1,7 @@
+####################################################################
+# SCRIPT FOR GRAPHICS OF COMPUTING TIMES OF SCCs
+####################################################################
+
 install.packages("plotly")
 install.packages("gapminder")
 library(ggplot2)
@@ -44,8 +48,6 @@ triang <- ggplot(data_triangulation, aes(n, t)) +
        theme(plot.title=element_text(hjust=1, vjust=0.5, face='bold'))
 ggplotly(triang)
 
-
-###
 ###
 
 # ONE-SAMPLE TIMES:
@@ -59,7 +61,6 @@ colnames(one_sample_times_N15)[1] <- "N"
 colnames(one_sample_times_N25)[1] <- "N"
       
 data <- rbind(one_sample_times_N8, one_sample_times_N15, one_sample_times_N25)
-
 
 one_sample <- ggplot(data = data, aes(x = n,  y = t, color = N)) +
   geom_point() +
@@ -86,13 +87,11 @@ ggplot(data = data, aes(x = n,  y = t, color = N)) +
 
 dev.off()
 
-
-###
 ###
 
 # TWO-SAMPLE TIMES:
 
-load("my_data.RData")
+load("my_data.RData") 
 
 two_sample_times_N8 <- cbind(matrix(rep("N8", length.out=nrow(two_sample_times_N8))), two_sample_times_N8)
 two_sample_times_N15 <- cbind(matrix(rep("N15", length.out=nrow(two_sample_times_N15))), two_sample_times_N15)
@@ -103,7 +102,6 @@ colnames(two_sample_times_N15)[1] <- "N"
 colnames(two_sample_times_N25)[1] <- "N"
       
 data <- rbind(two_sample_times_N8, two_sample_times_N15, two_sample_times_N25)
-
 
 two_sample <- ggplot(data = data, aes(x = n,  y = t, color = N)) +
   geom_point() +

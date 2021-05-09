@@ -1,3 +1,8 @@
+####################################################################
+# SCRIPT FOR COMPUTING TIMES OF SCC IN TWO-GROUP SETUP
+####################################################################
+
+
 if(!require(devtools)){install.packages('devtools');library(devtools)}
 if(!require(BPST)){install_github("funstatpackages/BPST");library(BPST)}
 if(!require(Triangulation)){install_github("funstatpackages/Triangulation");library(Triangulation)}
@@ -57,8 +62,6 @@ delta=0.8   # delta=0,...,0.8
 alpha.grid=c(0.10,0.05,0.01)
 
 # Example: Run two sample SCC construction one time:
-
-###
 
 two_sample_times_N8 <- data.frame(n = integer(), t = numeric()) 
 list_two_8 <- list()
@@ -121,56 +124,52 @@ for (i in 1:length(n)){
     two_sample_times_N25 <- rbind(two_sample_times_N25, datos)
 }
 
-###
-
+### This is for visualization of areas with values outside SCC
 
 aa = out_two
 
+Z.band <- matrix(aa$Z.band,ncol=2) # Posiciones
+z1 <- unique(Z.band[,1]); z2 <- unique(Z.band[,2]); # Posiciones por separado
+n1 <- length(z1); n2 <- length(z2) # Longitud de dichas posiciones
+scc <- matrix(NA,n1*n2,2) # Se crea la matriz donde irá el valor de SCC para cada posicion
+ind.inside.band <- aa$ind.inside.cover # Solo las zonas cubiertas por la triangulacion
+scc[ind.inside.band,] <- aa$scc[,,2] # se asigna el SCC a esas zonas (1,2,3 para los diferentes alpha)
+scc.limit <- c(min(scc[,1],na.rm=TRUE), max(scc[,2],na.rm=TRUE)) # Limites: minimo de la inferior y máximo de la superior
+
+scc.l.mtx <- matrix(scc[,1],nrow=n2,ncol=n1) # Lower SCC for each location. 
+scc.u.mtx <- matrix(scc[,2],nrow=n2,ncol=n1) # Upper SCC for each location.
+scc.l.mtx[scc.l.mtx<0]=NA # Los que cumplen lo esperable se ponen NA para no representarlos, solo los Lower SCC que son positivos se quedan
+scc.u.mtx[scc.u.mtx>0]=NA # Los que cumplen lo esperable se ponen NA para no representarlos, solo los Upper SCC que son negativos se quedan
 
 
-        Z.band <- matrix(aa$Z.band,ncol=2) # Posiciones
-        z1 <- unique(Z.band[,1]); z2 <- unique(Z.band[,2]); # Posiciones por separado
-        n1 <- length(z1); n2 <- length(z2) # Longitud de dichas posiciones
-        scc <- matrix(NA,n1*n2,2) # Se crea la matriz donde irá el valor de SCC para cada posicion
-        ind.inside.band <- aa$ind.inside.cover # Solo las zonas cubiertas por la triangulacion
-        scc[ind.inside.band,] <- aa$scc[,,2] # se asigna el SCC a esas zonas (1,2,3 para los diferentes alpha)
-        scc.limit <- c(min(scc[,1],na.rm=TRUE), max(scc[,2],na.rm=TRUE)) # Limites: minimo de la inferior y máximo de la superior
-        
-        scc.l.mtx <- matrix(scc[,1],nrow=n2,ncol=n1) # Lower SCC for each location. 
-        scc.u.mtx <- matrix(scc[,2],nrow=n2,ncol=n1) # Upper SCC for each location.
-        scc.l.mtx[scc.l.mtx<0]=NA # Los que cumplen lo esperable se ponen NA para no representarlos, solo los Lower SCC que son positivos se quedan
-        scc.u.mtx[scc.u.mtx>0]=NA # Los que cumplen lo esperable se ponen NA para no representarlos, solo los Upper SCC que son negativos se quedan
-        
-        
-        image.plot(z2,z1,scc.l.mtx, zlim = scc.limit) # Regiones en que la diferencia de medias es positiva (cae encima del 0), o sea, que la imagen 1 es más fuerte que la imagen 2 en esas áreas
-        image.plot(z2,z1,scc.u.mtx, zlim = scc.limit) # Regiones en que la diferencia de medias es negativa (cae debajo del 0), o sea, que la imagen 2 es más fuerte que la imagen 1 en esas áreas
-        
-        points.P<-which(scc.l.mtx>0,arr.ind=TRUE) # Puntos con diferencia de medias positiva (primera más fuerte)
-        points.N<-which(scc.u.mtx<0,arr.ind=TRUE) # Puntos con diferencia de medias negativa (segunda más fuerte)
-        
-     
-        points.P <- (points.P/79)
-        points.N <- (points.N/79)
-        
-        
-         plot(out_two,
-         breaks=c(0,100),
-         col="turquoise",
-         # breaks=seq(from=-1,to=6, length.out = 65),
-         # xlab="Longitudinal (1-95)",
-         # ylab="Transversal (1-79)",
-         # sub="Difference between estimated mean functions: CNs - ADs",
-         # col.sub="red",
-         family ="serif")
-        
-              points(points.P,
-                     type="p",
-                     pch=".",
-                     col="red",
-                     cex=12)  
-              
-              points(points.N,
-                     type="p",
-                     pch=".",
-                     col="blue",
-                     cex=12) 
+image.plot(z2,z1,scc.l.mtx, zlim = scc.limit) # Regiones en que la diferencia de medias es positiva (cae encima del 0), o sea, que la imagen 1 es más fuerte que la imagen 2 en esas áreas
+image.plot(z2,z1,scc.u.mtx, zlim = scc.limit) # Regiones en que la diferencia de medias es negativa (cae debajo del 0), o sea, que la imagen 2 es más fuerte que la imagen 1 en esas áreas
+
+points.P<-which(scc.l.mtx>0,arr.ind=TRUE) # Puntos con diferencia de medias positiva (primera más fuerte)
+points.N<-which(scc.u.mtx<0,arr.ind=TRUE) # Puntos con diferencia de medias negativa (segunda más fuerte)
+
+points.P <- (points.P/79) # Re-escalation
+points.N <- (points.N/79)
+
+
+plot(out_two,
+     breaks=c(0,100),
+     col="turquoise",
+     # breaks=seq(from=-1,to=6, length.out = 65),
+     # xlab="Longitudinal (1-95)",
+     # ylab="Transversal (1-79)",
+     # sub="Difference between estimated mean functions: CNs - ADs",
+     # col.sub="red",
+     family ="serif")
+
+    points(points.P,
+           type="p",
+           pch=".",
+           col="red",
+           cex=12)  
+    
+    points(points.N,
+           type="p",
+           pch=".",
+           col="blue",
+           cex=12) 

@@ -1,5 +1,5 @@
 ######################################################
-#  SCRIPT FOR TRIANGULATION TIMES 
+#  SCRIPT FOR TRIANGULATION TIME COMPUTATION
 ######################################################
 
 # FIRST WE LOAD SAMPLE DATA FOR A PET STUDY TO FIND CONTOURS FOR DATA TO BE SIMULATED

@@ -1,6 +1,6 @@
-######################################################
-#  SCRIPT FOR THE SIMULATION OF DATA FOR ICCSA PAPER
-######################################################
+####################################################################
+# SCRIPT FOR COMPUTING TIMES OF SCC IN ONE-GROUP SETUP
+####################################################################
 
 setwd("~/MEGA/PhD/12. ICCSA Technical Publication/R Code")
 load("contour.rda")
