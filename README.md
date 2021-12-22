@@ -1,6 +1,10 @@
 # FDA for Imaging Data - Technical Article
- In this repository I keep the codes used for the article "Applications of functional data analysis to the estimation of mean function and confidence bands for imaging data". Everything is run using R and the scripts should be complete and with enough comments for anyone to understand in case they want to replicate the results. Long life open science!
 
+In this repository I keep the codes used for the article:
+
+Arias-López J.A., Cadarso-Suárez C., Aguiar-Fernández P. (2021) Computational Issues in the Application of Functional Data Analysis to Imaging Data. In: Gervasi O. et al. (eds) Computational Science and Its Applications – ICCSA 2021. ICCSA 2021. Lecture Notes in Computer Science, vol 12950. Springer, Cham. https://doi.org/10.1007/978-3-030-86960-1_46
+
+Everything should be self-contained and ready to run. Just download the whole folder and the templates, functions... are there, ready to go. 
 
 ## Triangulation Times:
 ![triangulation_times](https://user-images.githubusercontent.com/34753691/117585047-a45bba00-b110-11eb-9735-1304d1bf7b54.png)
